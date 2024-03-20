@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Cliente.API.Filters;
 using Cliente.CrossCutting.AppDependencies;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +14,12 @@ builder.Services.AddSwaggerGen();
 
 // Register services
 builder.Services.AddInfrastructure(builder.Configuration);
+
+//Registro do filtro
+builder.Services.AddMvc(options =>
+{
+    options.Filters.Add(new CustomExceptionFilter());
+});
 
 var app = builder.Build();
 
