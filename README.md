@@ -1,6 +1,7 @@
 # NDD-Desafio
 Descrição do desafio:
   - Criar uma API que tem como objetivo salvar os dados de um cliente
+----------------------
 
 Desccrição do Crud:
 Implementado as operações: 
@@ -8,6 +9,7 @@ Implementado as operações:
   - consulta (GET) (Por id e GetAll);
   - atualização (Put);
   - Deleção (Delete).
+----------------------
     
 Seguindo o seguinte diagrama:
 
@@ -15,5 +17,18 @@ Seguindo o seguinte diagrama:
 
 
 Solução
+----------------------
 
+----------------------
 
+Tecnologias utilizadas:
+ - C#;
+ - .NET 8;
+ - Microsoft SQL Server;
+ - ORM Entity Framework;
+ - DependencyInjection;
+ - MediatR;
+ - FluentValidation para validações de propriedades;
+ - Utilizando pradrões do princípios de SOLID;
+ - Padrão de projeto DDD com clean Architecture;
+   
