@@ -5,8 +5,8 @@ Descrição do desafio:
 
 Desccrição do Crud:
 Implementado as operações: 
-  - criação de Post; 
-  - consulta (GET) (Por id e GetAll);
+  - criação (Post); 
+  - consulta (Get) (Por id e GetAll);
   - atualização (Put);
   - Deleção (Delete).
 ----------------------
