@@ -6,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Cliente.Infrastructure.Context;
 using Cliente.Infrastructure.Repositories;
 using Cliente.Domain.Abstractions;
+using MediatR;
 
 namespace Cliente.CrossCutting.AppDependencies
 {
@@ -23,6 +24,12 @@ namespace Cliente.CrossCutting.AppDependencies
 
             services.AddScoped<IClientesRepository, ClientesRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+            var myhandlers = AppDomain.CurrentDomain.Load("Cliente.Application");
+            services.AddMediatR(cfg =>
+                {
+                    cfg.RegisterServicesFromAssemblies(myhandlers);
+                });
 
             return services;
         }

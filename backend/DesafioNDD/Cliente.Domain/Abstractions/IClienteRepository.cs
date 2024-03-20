@@ -9,7 +9,7 @@ namespace Cliente.Domain.Abstractions
         Task<Clientes> GetClienteById(string clienteId);
         Task<Clientes> AddCliente(Clientes cliente);
         void UpdateCliente(Clientes cliente);
-        Task<Clientes> DeleteMember(string clienteId);
+        Task<Clientes> DeleteCliente(string clienteId);
         
     }
 }

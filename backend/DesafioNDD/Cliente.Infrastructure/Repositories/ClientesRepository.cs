@@ -48,7 +48,7 @@ namespace Cliente.Infrastructure.Repositories
             db.Clientes.Update(cliente);
         }
 
-        public async Task<Clientes> DeleteMember(string clienteId)
+        public async Task<Clientes> DeleteCliente(string clienteId)
         {
             var cliente = await GetClienteById(clienteId);
 

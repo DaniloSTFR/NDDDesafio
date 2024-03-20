@@ -2,6 +2,10 @@
 using Cliente.Domain.Abstractions;
 using Cliente.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Cliente.Application.ClientesApp.Commands;
+using Cliente.Application.ClientesApp.Queries;
+
+using MediatR;
 
 namespace Cliente.API.Controllers
 {
@@ -9,74 +13,58 @@ namespace Cliente.API.Controllers
     [Route("api/[controller]")]
     public class ClientesController : ControllerBase
     {
-        private readonly IUnitOfWork _unitOfWork;
+            private readonly IMediator _mediator;
 
-        public ClientesController(IUnitOfWork unitOfWork)
+        public ClientesController(IMediator mediator)
         {
-            _unitOfWork = unitOfWork;
+            _mediator = mediator;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetClientes()
         {
-            var clientes = await _unitOfWork.ClientesRepository.GetClientes();
-            return Ok(clientes);
+            var query = new GetClientesQuery();
+            var cliente = await _mediator.Send(query);
+            return cliente != null ? Ok(cliente) : NotFound("Sem Clientes");
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetClientes(string id)
         {
-            var clientes = await _unitOfWork.ClientesRepository.GetClienteById(id);
-            return Ok(clientes);
+            var query = new GetClienteByIdQuery{ Id = id };
+            var cliente = await _mediator.Send(query);
+            return cliente != null ? Ok(cliente) : NotFound("Cliente não encontrado.");
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateCliente(Clientes clientes)
+        public async Task<IActionResult> CreateCliente(CreateClienteCommand command)
         {
-            if(clientes == null)
+            if(command == null)
             {
                 return BadRequest("Dados inválidos.");
             }
 
-            var createCliente = await _unitOfWork.ClientesRepository.AddCliente(clientes);
-            await _unitOfWork.CommitAsync();
-
-            return CreatedAtAction(nameof(GetClientes), new { id = createCliente.Id }, createCliente);
-
+            var createdCliente = await _mediator.Send(command);
+            return CreatedAtAction(nameof(GetClientes), new { id = createdCliente.Id }, createdCliente);
         }
 
+
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateCliente(string id, Clientes upCliente)
+        public async Task<IActionResult> UpdateCliente(string id, UpdateClienteCommand command)
         {
-            var existingCliente = await _unitOfWork.ClientesRepository.GetClienteById(id);
-
-            if(existingCliente is null){
-                return NotFound("Cliente não encontrado"); 
-            }
-            existingCliente.Update( upCliente.Nome, 
-                                    upCliente.CPF, 
-                                    upCliente.Sexo, 
-                                    upCliente.Telefone, 
-                                    upCliente.Email, 
-                        upCliente.DataNascimento,  upCliente.Observacao) ;
-
-            await _unitOfWork.CommitAsync();
-            return Ok("Id:"+id+" atualizado com Sucesso!");
+            command.Id = id;
+            var updatedCliente = await _mediator.Send(command);
+            return updatedCliente != null ?  Ok(updatedCliente) : NotFound("Cliente não encontrado.");
 
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCliente(string id)
         {
-            var deleteCliente = await _unitOfWork.ClientesRepository.DeleteMember(id);
-            
-            if(deleteCliente == null)
-            {
-                return NotFound("Cliente não encontrado");
-            }
+            var command = new DeleteClienteCommand { Id = id };
+            var deletedMember = await _mediator.Send(command);
 
-            await _unitOfWork.CommitAsync();
-            return Ok(deleteCliente);
+            return deletedMember != null ? Ok(deletedMember) : NotFound("Cliente não encontrado.");
         }
     }
 }
