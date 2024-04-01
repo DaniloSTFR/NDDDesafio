@@ -4,7 +4,6 @@ using Cliente.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Cliente.Application.ClientesApp.Commands;
 using Cliente.Application.ClientesApp.Queries;
-
 using MediatR;
 
 namespace Cliente.API.Controllers
